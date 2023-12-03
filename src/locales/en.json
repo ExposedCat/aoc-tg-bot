@@ -1,4 +1,11 @@
 {
-  "start": "[${chatName}] Hi there, ${name}!",
-  "stop": "[${chatName}] Bye, ${name}!"
+  "start": "Hi there!",
+  "leaderboard": "${members}",
+  "member": "${position} ${name}  -  <b>${score}</b> ❆${day}",
+  "day": " (day ${date})",
+  "place": {
+    "0": "🥇",
+    "1": "🥈",
+    "2": "🥉"
+  }
 }
