@@ -1,10 +1,10 @@
 import { Composer } from 'grammy'
 import type { CustomContext } from '../types/context.js'
-import { getLeaderborad } from '../services/aoc-api.js'
+import { getMembers } from '../services/database.js'
 
 export const leaderboardController = new Composer<CustomContext>()
 leaderboardController.command('leaderboard', async ctx => {
-  const members = await getLeaderborad(process.env.LEADERBOARD_ID)
+  const members = await getMembers(ctx.db)
 
   const formatter = new Intl.DateTimeFormat('en-US', {
     day: 'numeric',

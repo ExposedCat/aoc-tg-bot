@@ -2,6 +2,7 @@ import type { Context, SessionFlavor } from 'grammy'
 import type { I18nContextFlavor, TemplateData } from '@grammyjs/i18n'
 
 import type { Extra } from './telegram.js'
+import type { Database } from '../config/database.js'
 
 export interface Custom<C extends Context> {
   text: (
@@ -9,6 +10,7 @@ export interface Custom<C extends Context> {
     templateData?: TemplateData,
     extra?: Extra
   ) => ReturnType<C['reply']>
+  db: Database
 }
 
 export type CustomContextMethods = Custom<Context>
