@@ -1,6 +1,6 @@
 {
   "start": "Hi there!",
-  "leaderboard": "${members}",
+  "leaderboard": "${members}\n\n<i>Powered by @ExposedCatDev</i>",
   "member": "${position} ${name}  -  <b>${score}</b> ❆${day}",
   "day": " (day ${date})",
   "place": {
