@@ -2,7 +2,6 @@ import type { Database } from '../config/database.js'
 import type { Member } from './aoc-api.js'
 
 export async function getMembers(db: Database): Promise<Member[]> {
-  await db.member.deleteMany({})
   return await db.member
     .aggregate<Member>([
       {
@@ -18,5 +17,6 @@ export async function saveMembers(
   db: Database,
   members: Member[]
 ): Promise<void> {
+  await db.member.deleteMany({})
   await db.member.insertMany(members)
 }
