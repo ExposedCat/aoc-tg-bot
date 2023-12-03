@@ -1,14 +1,14 @@
 {
-  "name": "ts-tg-bot",
+  "name": "aoc-tg-bot",
   "version": "1.0.0",
-  "description": "Telegram bot template in TypeScript ",
+  "description": "Advent of Code Leaderboard - Telegram Bot",
   "main": "build/index.js",
   "scripts": {
     "compile": "tsc",
     "postcompile": "cp -r .env src/locales build",
-    "bg:start": "npm run prepare && pm2 start build/index.js --name telegram-bot",
-    "bg:restart": "npm run prepare && pm2 restart telegram-bot",
-    "bg:logs": "pm2 logs telegram-bot --lines 1000 -f",
+    "bg:start": "npm run prepare && pm2 start build/index.js --name aoc",
+    "bg:restart": "npm run prepare && pm2 restart aoc",
+    "bg:logs": "pm2 logs aoc --lines 1000 -f",
     "start": "npm run compile && node .",
     "lint": "npx prettier --write src"
   },
