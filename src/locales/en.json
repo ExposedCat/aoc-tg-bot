@@ -1,7 +1,7 @@
 {
   "start": "Hi there!",
   "leaderboard": "${members}\n\n<i>Powered by @ExposedCatDev</i>",
-  "member": "${position} ${name}  -  <b>${score}</b> ❄️${day}",
+  "member": "${position} ${name}  -  <b>${score}</b> ❄️",
   "change": "${members}\n\n/leaderboard",
   "newMember": "${name} joined AoC with <b>${score}</b> ❄️!",
   "memberChange": "${name} got <b>${score}</b> ❄️ more",
