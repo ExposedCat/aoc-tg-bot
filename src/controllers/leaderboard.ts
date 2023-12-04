@@ -17,7 +17,7 @@ leaderboardController.command('leaderboard', async ctx => {
       .map((member, place) =>
         ctx.i18n.t('member', {
           position: place < 3 ? ctx.i18n.t(`place.${place}`) : `${place + 1}.`,
-          name: member.name ?? `Anonymous #${member.id}`,
+          name: member.name ?? `Anon ${member.id}`,
           score: member.localScore,
           day: member.lastStar
             ? ctx.i18n.t('day', { date: formatter.format(member.lastStar) })

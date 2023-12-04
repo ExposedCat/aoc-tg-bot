@@ -37,9 +37,7 @@ function setupControllers(bot: Bot) {
   bot.use(leaderboardController)
 }
 
-export async function startBot(
-  database: Database
-): Promise<{ bot: Bot; i18n: I18n }> {
+export async function startBot(database: Database): Promise<Bot> {
   const localesPath = resolvePath(import.meta.url, '../locales')
   const i18n = initLocaleEngine(localesPath)
   const bot = new TelegramBot<CustomContext>(process.env.TOKEN)
@@ -51,5 +49,5 @@ export async function startBot(
   // so give it a second to start instead of `await`
   bot.start()
 
-  return new Promise(resolve => setTimeout(() => resolve({ bot, i18n }), 1_000))
+  return new Promise(resolve => setTimeout(() => resolve(bot), 1_000))
 }
