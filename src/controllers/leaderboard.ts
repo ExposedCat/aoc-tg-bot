@@ -1,6 +1,6 @@
 import { Composer } from 'grammy'
 import type { CustomContext } from '../types/context.js'
-import { getMembers } from '../services/database.js'
+import { getMembers } from '../services/member.js'
 
 export const leaderboardController = new Composer<CustomContext>()
 leaderboardController.command('leaderboard', async ctx => {

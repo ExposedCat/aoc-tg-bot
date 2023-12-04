@@ -3,8 +3,13 @@ import { MongoClient } from 'mongodb'
 
 import type { Member } from '../services/aoc-api.js'
 
+export type Group = {
+  id: number
+}
+
 export type Database = {
   member: Collection<Member>
+  group: Collection<Group>
 }
 
 export async function connectToDb() {
@@ -12,6 +17,7 @@ export async function connectToDb() {
   await client.connect()
   const mongoDb = client.db()
   const member = mongoDb.collection<Member>('member')
-  const database: Database = { member }
+  const group = mongoDb.collection<Group>('group')
+  const database: Database = { member, group }
   return database
 }

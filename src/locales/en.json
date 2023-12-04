@@ -2,7 +2,9 @@
   "start": "Hi there!",
   "leaderboard": "${members}\n\n<i>Powered by @ExposedCatDev</i>",
   "member": "${position} ${name}  -  <b>${score}</b> ❄️${day}",
-  "day": " (day ${date})",
+  "change": "${members}\n\n/leaderboard",
+  "newMember": "${name} joined AoC with <b>${score}</b> ❄️!",
+  "memberChange": "${name} got <b>${score}</b> ❄️ more",
   "place": {
     "0": "🥇",
     "1": "🥈",
