@@ -7,7 +7,7 @@ export async function getGroups(db: Database): Promise<Group[]> {
 export async function saveGroup(db: Database, groupId: number): Promise<void> {
   await db.group.updateOne(
     { groupId } as Partial<Group>,
-    { $set: { id: groupId } as Partial<Group> },
+    { $set: { groupId } as Partial<Group> },
     { upsert: true }
   )
 }
