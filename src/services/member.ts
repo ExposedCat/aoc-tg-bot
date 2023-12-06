@@ -28,6 +28,6 @@ export async function saveMembers(
   db: Database,
   members: Member[]
 ): Promise<void> {
-  // await db.member.deleteMany({})
-  // await db.member.insertMany(members)
+  await db.member.deleteMany({})
+  await db.member.insertMany(members)
 }
