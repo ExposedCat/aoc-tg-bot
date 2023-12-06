@@ -1,13 +1,4 @@
 {
-  "start": "Hi there!",
-  "leaderboard": "${members}\n\n<i>Powered by @ExposedCatDev</i>",
-  "member": "${position} ${name}  -  <b>${score}</b> ❄️",
-  "change": "${members}\n\n/leaderboard",
-  "newMember": "${name} joined AoC with <b>${score}</b> ❄️!",
-  "memberChange": "${name} got <b>${score}</b> ❄️ more",
-  "place": {
-    "0": "🥇",
-    "1": "🥈",
-    "2": "🥉"
-  }
+  "start": "Welcome to the Advent of Code!\n\n- I will notify you on leaderboard changes\n- I can show /leaderboard\n\n<i>Powered by @ExposedCatDev</i>",
+  "leaderboard": "${leaderboard}\n<i>Powered by @ExposedCatDev</i>"
 }

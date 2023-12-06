@@ -133,5 +133,6 @@ export function buildLeaderboardString(rows: Change[]) {
     return `${place} ${placeChange} ${name} ❄️${score} ${scoreChange} ${state}`
   }
 
-  return rows.map(formatRow).join('\n')
+  const leaderboard = rows.map(formatRow).join('\n')
+  return `<pre><code class="language-leaderboard">${leaderboard}</code></pre>`
 }

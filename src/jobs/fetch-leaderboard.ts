@@ -29,7 +29,7 @@ export async function startFetchingLeaderboard(
           try {
             await bot.api.sendMessage(
               group.id,
-              `${changeLines}\n<pre><code class="language-leaderboard">${stringLeaderboard}</code></pre>`,
+              `${changeLines}\n${stringLeaderboard}`,
               { parse_mode: 'HTML' }
             )
           } catch (error) {
