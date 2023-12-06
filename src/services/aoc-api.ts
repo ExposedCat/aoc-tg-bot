@@ -1,3 +1,5 @@
+import type { Member } from './member.js'
+
 const ENDPOINT = 'https://adventofcode.com/2023/leaderboard/private/view'
 
 type APIResponse = {
@@ -12,16 +14,18 @@ type APIResponse = {
       stars: number
       local_score: number
       id: number
+      completion_day_level: Record<
+        string,
+        Record<
+          string,
+          {
+            star_index: number
+            get_star_ts: number
+          }
+        >
+      >
     }
   >
-}
-
-export type Member = {
-  id: number
-  name: string | null
-  lastStar: Date | null
-  stars: number
-  localScore: number
 }
 
 export async function getLeaderborad(id: string): Promise<Member[] | []> {
@@ -35,9 +39,14 @@ export async function getLeaderborad(id: string): Promise<Member[] | []> {
       .map(member => ({
         id: member.id,
         name: member.name,
-        lastStar: member.last_star_ts
-          ? new Date(member.last_star_ts * 1000)
-          : null,
+        timings: Object.entries(member.completion_day_level).flatMap(
+          ([day, tasks]) =>
+            Object.entries(tasks).map(([task, data]) => ({
+              day: Number(day),
+              task: Number(task),
+              date: new Date(data.get_star_ts * 1000)
+            }))
+        ),
         stars: member.stars,
         localScore: member.local_score
       }))

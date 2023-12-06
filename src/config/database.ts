@@ -1,7 +1,6 @@
 import type { Collection } from 'mongodb'
 import { MongoClient } from 'mongodb'
-
-import type { Member } from '../services/aoc-api.js'
+import type { Member } from '../services/member.js'
 
 export type Group = {
   id: number

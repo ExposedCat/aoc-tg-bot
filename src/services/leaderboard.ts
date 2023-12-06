@@ -1,6 +1,8 @@
 import type { Database } from '../config/database.js'
-import type { Member } from './aoc-api.js'
+import type { Member } from './member.js'
 import { getMembers } from './member.js'
+
+const DAY = 24 * 60 * 60 * 1_000
 
 export type Change = {
   new?: boolean
@@ -8,6 +10,26 @@ export type Change = {
   placeChange: number
   score: number
   scoreChange: number
+  timings: Member['timings']
+}
+
+function getCompletionStars(timings: Member['timings']) {
+  const lastDay = Math.min(
+    31,
+    Math.ceil((Number(new Date()) - Number(new Date(2023, 11, 1))) / DAY)
+  )
+
+  const completed = timings.map(timing => `${timing.day}.${timing.task}`)
+
+  let stars = ''
+  for (let day = 1; day <= lastDay; ++day) {
+    stars += completed.includes(`${day}.2`)
+      ? '*'
+      : completed.includes(`${day}.1`)
+        ? '.'
+        : ' '
+  }
+  return stars
 }
 
 function withPlaces(members: Member[]): (Member & { place: number })[] {
@@ -36,7 +58,7 @@ export function getChangesInfo(changes: Change[]) {
       } else if (change.placeChange < 0 && change.scoreChange) {
         changeLines += ` but moved <b>${Math.abs(
           change.placeChange
-        )}</b> places down`
+        )}</b> place${change.placeChange > 1 ? 's' : ''} down`
       }
       changeLines += '!\n'
     }
@@ -61,7 +83,8 @@ export async function diffLeaderboard(db: Database, current: Member[]) {
       name: newMember.name ?? `Anon ${newMember.id}`,
       placeChange: oldMember ? oldMember.place - newMember.place : 0,
       score: newMember.localScore,
-      scoreChange: oldMember ? newMember.localScore - oldMember.localScore : 0
+      scoreChange: oldMember ? newMember.localScore - oldMember.localScore : 0,
+      timings: newMember.timings
     })
   }
   return scoreChanged ? changes : []
@@ -69,11 +92,6 @@ export async function diffLeaderboard(db: Database, current: Member[]) {
 
 export function buildLeaderboardString(rows: Change[]) {
   const maxPlace = rows.length
-  const maxPlaceChange =
-    rows.reduce(
-      (placeChange, row) => Math.max(placeChange, Math.abs(row.placeChange)),
-      0
-    ) * 1000
   const maxScore = rows.reduce((score, row) => Math.max(score, row.score), 0)
   const maxScoreChange =
     rows.reduce(
@@ -99,11 +117,11 @@ export function buildLeaderboardString(rows: Change[]) {
 
   const formatRow = (row: Change, index: number) => {
     const place = formatItem(index + 1, maxPlace)
-    const placeChange = formatItem(
-      row.placeChange > 0 ? `+${row.placeChange}` : row.placeChange || '',
-      maxPlaceChange,
-      true
-    )
+    const placeChange = row.placeChange
+      ? row.placeChange > 0
+        ? '▲'
+        : '▼'
+      : ' '
     const score = formatItem(row.score, maxScore)
     const scoreChange = formatItem(
       row.scoreChange > 0 ? `+${row.scoreChange}` : row.scoreChange || '',
@@ -111,7 +129,8 @@ export function buildLeaderboardString(rows: Change[]) {
       true
     )
     const name = formatItem(row.name, maxName, false, false)
-    return `${place} ${placeChange}  ${name}  ❄️${score} ${scoreChange}`
+    const state = getCompletionStars(row.timings)
+    return `${place} ${placeChange} ${name} ❄️${score} ${scoreChange} ${state}`
   }
 
   return rows.map(formatRow).join('\n')

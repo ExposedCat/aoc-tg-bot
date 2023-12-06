@@ -1,5 +1,16 @@
 import type { Database } from '../config/database.js'
-import type { Member } from './aoc-api.js'
+
+export type Member = {
+  id: number
+  name: string | null
+  timings: {
+    day: number
+    task: number
+    date: Date
+  }[]
+  stars: number
+  localScore: number
+}
 
 export async function getMembers(db: Database): Promise<Member[]> {
   return await db.member
@@ -17,6 +28,6 @@ export async function saveMembers(
   db: Database,
   members: Member[]
 ): Promise<void> {
-  await db.member.deleteMany({})
-  await db.member.insertMany(members)
+  // await db.member.deleteMany({})
+  // await db.member.insertMany(members)
 }

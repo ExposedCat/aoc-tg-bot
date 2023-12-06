@@ -26,11 +26,15 @@ export async function startFetchingLeaderboard(
         const stringLeaderboard = buildLeaderboardString(changes)
         const changeLines = getChangesInfo(changes)
         for (const group of groups) {
-          await bot.api.sendMessage(
-            group.id,
-            `${changeLines}\n<pre><code class="language-leaderboard">${stringLeaderboard}</code></pre>`,
-            { parse_mode: 'HTML' }
-          )
+          try {
+            await bot.api.sendMessage(
+              group.id,
+              `${changeLines}\n<pre><code class="language-leaderboard">${stringLeaderboard}</code></pre>`,
+              { parse_mode: 'HTML' }
+            )
+          } catch (error) {
+            console.error(`Failed to notify chat ${group.id}!`)
+          }
         }
       }
     } catch (error) {
