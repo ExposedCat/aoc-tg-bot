@@ -7,6 +7,7 @@ const DAY = 24 * 60 * 60 * 1_000
 export type Change = {
   new?: boolean
   name: string
+  place: number
   placeChange: number
   score: number
   scoreChange: number
@@ -32,8 +33,27 @@ function getCompletionStars(timings: Member['timings']) {
   return stars
 }
 
-function withPlaces(members: Member[]): (Member & { place: number })[] {
-  return members.map((member, i) => ({ ...member, place: i + 1 }))
+export type PlacedMember = Member & { place: number }
+export function withPlaces(members: Member[]): PlacedMember[] {
+  const list: PlacedMember[] = []
+
+  const lastId = members[members.length - 1].id
+  let lastScore = -1
+  let place = 0
+
+  for (let i = 0; i < members.length; ++i) {
+    const member = members[i]
+    if (lastScore !== member.localScore) {
+      place += 1
+    }
+    list.push({ ...member, place })
+    if (member.id === lastId) {
+      break
+    }
+    lastScore = member.localScore
+  }
+
+  return list
 }
 
 export function getChangesInfo(changes: Change[]) {
@@ -81,6 +101,7 @@ export async function diffLeaderboard(db: Database, current: Member[]) {
     changes.push({
       new: !oldMember,
       name: newMember.name ?? `Anon ${newMember.id}`,
+      place: newMember.place,
       placeChange: oldMember ? oldMember.place - newMember.place : 0,
       score: newMember.localScore,
       scoreChange: oldMember ? newMember.localScore - oldMember.localScore : 0,
@@ -91,7 +112,7 @@ export async function diffLeaderboard(db: Database, current: Member[]) {
 }
 
 export function buildLeaderboardString(rows: Change[]) {
-  const maxPlace = rows.length
+  const maxPlace = rows.reduce((place, row) => Math.max(place, row.place), 0)
   const maxScore = rows.reduce((score, row) => Math.max(score, row.score), 0)
   const maxScoreChange =
     rows.reduce(
@@ -115,8 +136,8 @@ export function buildLeaderboardString(rows: Change[]) {
     )}`
   }
 
-  const formatRow = (row: Change, index: number) => {
-    const place = formatItem(index + 1, maxPlace)
+  const formatRow = (row: Change) => {
+    const place = formatItem(row.place, maxPlace)
     const placeChange = row.placeChange
       ? row.placeChange > 0
         ? '▲'
@@ -129,7 +150,7 @@ export function buildLeaderboardString(rows: Change[]) {
       true
     )
     const name = formatItem(row.name, maxName, false, false)
-    const state = getCompletionStars(row.timings)
+    const state = getCompletionStars(row.timings).slice(-3)
     return `${place} ${placeChange} ${name} ❄️${score} ${scoreChange} ${state}`
   }
 
