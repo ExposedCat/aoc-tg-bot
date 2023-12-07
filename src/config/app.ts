@@ -1,3 +1,4 @@
+import type { I18n } from '@grammyjs/i18n'
 import { loadEnv } from '../helpers/load-env.js'
 import { validateEnv } from '../helpers/validate-env.js'
 import { startFetchingLeaderboard } from '../jobs/fetch-leaderboard.js'
@@ -27,8 +28,11 @@ export async function startApp() {
 
   console.debug('Starting bot..')
   let bot: Bot
+  let i18n: I18n
   try {
-    bot = await startBot(database)
+    const { bot: _bot, i18n: _i18n } = await startBot(database)
+    bot = _bot
+    i18n = _i18n
   } catch (error) {
     console.error('Error occurred while starting the bot:', error)
     process.exit(3)
@@ -36,7 +40,7 @@ export async function startApp() {
 
   console.debug('Starting jobs..')
   try {
-    await startFetchingLeaderboard(database, bot)
+    await startFetchingLeaderboard(database, bot, i18n)
   } catch (error) {
     console.error('Error occurred while starting jobs:', error)
     process.exit(2)

@@ -10,6 +10,7 @@ import { leaderboardController } from '../controllers/leaderboard.js'
 import type { Bot } from '../types/telegram.js'
 import type { Database } from './database.js'
 import { saveGroup } from '../services/group.js'
+import { progressController } from '../controllers/progress.js'
 
 function extendContext(bot: Bot, database: Database) {
   bot.use(async (ctx, next) => {
@@ -35,9 +36,12 @@ function setupMiddlewares(bot: Bot, localeEngine: I18n) {
 function setupControllers(bot: Bot) {
   bot.use(startController)
   bot.use(leaderboardController)
+  bot.use(progressController)
 }
 
-export async function startBot(database: Database): Promise<Bot> {
+export async function startBot(
+  database: Database
+): Promise<{ bot: Bot; i18n: I18n }> {
   const localesPath = resolvePath(import.meta.url, '../locales')
   const i18n = initLocaleEngine(localesPath)
   const bot = new TelegramBot<CustomContext>(process.env.TOKEN)
@@ -49,5 +53,5 @@ export async function startBot(database: Database): Promise<Bot> {
   // so give it a second to start instead of `await`
   bot.start()
 
-  return new Promise(resolve => setTimeout(() => resolve(bot), 1_000))
+  return new Promise(resolve => setTimeout(() => resolve({ bot, i18n }), 1_000))
 }

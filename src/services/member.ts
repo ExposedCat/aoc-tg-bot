@@ -16,9 +16,7 @@ export async function getMembers(db: Database): Promise<Member[]> {
   return await db.member
     .aggregate<Member>([
       {
-        $sort: {
-          localScore: -1
-        } as Partial<Member>
+        $sort: { localScore: -1 } as Partial<Member>
       }
     ])
     .toArray()

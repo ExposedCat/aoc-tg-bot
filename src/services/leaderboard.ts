@@ -1,8 +1,8 @@
 import type { Database } from '../config/database.js'
+import { formatItem } from './ascii.js'
 import type { Member } from './member.js'
 import { getMembers } from './member.js'
-
-const DAY = 24 * 60 * 60 * 1_000
+import { getCompletionStars } from './progress.js'
 
 export type Change = {
   new?: boolean
@@ -12,25 +12,6 @@ export type Change = {
   score: number
   scoreChange: number
   timings: Member['timings']
-}
-
-function getCompletionStars(timings: Member['timings']) {
-  const lastDay = Math.min(
-    31,
-    Math.ceil((Number(new Date()) - Number(new Date(2023, 11, 1))) / DAY)
-  )
-
-  const completed = timings.map(timing => `${timing.day}.${timing.task}`)
-
-  let stars = ''
-  for (let day = 1; day <= lastDay; ++day) {
-    stars += completed.includes(`${day}.2`)
-      ? '*'
-      : completed.includes(`${day}.1`)
-        ? '.'
-        : ' '
-  }
-  return stars
 }
 
 export type PlacedMember = Member & { place: number }
@@ -123,18 +104,6 @@ export function buildLeaderboardString(rows: Change[]) {
     (maxName, row) => Math.max(maxName, row.name.length),
     0
   )
-
-  const formatItem = (
-    item: string | number,
-    maxLength: number,
-    brackets = false,
-    convert = true
-  ) => {
-    const value = item !== '' ? (brackets ? `(${item})` : item.toString()) : ''
-    return `${value}${' '.repeat(
-      (convert ? maxLength.toString().length : maxLength) - value.length
-    )}`
-  }
 
   const formatRow = (row: Change) => {
     const place = formatItem(row.place, maxPlace)

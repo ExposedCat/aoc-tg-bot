@@ -1,4 +1,5 @@
 {
-  "start": "Welcome to the Advent of Code!\n\n- I will notify you on leaderboard changes\n- I can show /leaderboard\n\n<i>Powered by @ExposedCatDev</i>",
-  "leaderboard": "${leaderboard}\n<i>Powered by @ExposedCatDev</i>"
+  "start": "Welcome to the Advent of Code!\n\n- I will notify you on leaderboard changes\n- I can show /leaderboard\n- I can show /progress\n\n<i>Powered by @ExposedCatDev</i>",
+  "leaderboard": "${leaderboard}\nSee full /progress\n\n<i>Powered by @ExposedCatDev</i>",
+  "progress": "${progress}"
 }
