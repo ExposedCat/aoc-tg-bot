@@ -42,5 +42,5 @@ export function buildProgressString(members: Member[]) {
     )
     result += `${name} ${progress}\n`
   }
-  return `<pre><code clas="language-progress">${result}</code></pre>`
+  return `<pre><code class="language-progress">${result}</code></pre>`
 }
