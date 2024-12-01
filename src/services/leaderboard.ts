@@ -18,7 +18,7 @@ export type PlacedMember = Member & { place: number }
 export function withPlaces(members: Member[]): PlacedMember[] {
   const list: PlacedMember[] = []
 
-  const lastId = members[members.length - 1].id
+  const lastId = members.length === 0 ? 0 : members[members.length - 1].id
   let lastScore = -1
   let place = 0
 
@@ -68,7 +68,8 @@ export function getChangesInfo(changes: Change[]) {
 }
 
 export async function diffLeaderboard(db: Database, current: Member[]) {
-  const oldMembers = withPlaces(await getMembers(db))
+  const members = await getMembers(db)
+  const oldMembers = withPlaces(members)
   const newMembers = withPlaces(current)
   const changes: Change[] = []
   let scoreChanged = false

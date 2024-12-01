@@ -1,6 +1,6 @@
 import type { Member } from './member.js'
 
-const ENDPOINT = 'https://adventofcode.com/2023/leaderboard/private/view'
+const ENDPOINT = 'https://adventofcode.com/2024/leaderboard/private/view'
 
 type APIResponse = {
   event: string

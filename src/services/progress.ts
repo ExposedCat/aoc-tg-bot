@@ -6,7 +6,7 @@ const DAY = 24 * 60 * 60 * 1_000
 export function getCompletionStars(timings: Member['timings']) {
   const lastDay = Math.min(
     31,
-    Math.ceil((Number(new Date()) - Number(new Date(2023, 11, 1))) / DAY)
+    Math.ceil((Number(new Date()) - Number(new Date(2024, 11, 1))) / DAY)
   )
 
   const completed = timings.map(timing => `${timing.day}.${timing.task}`)
