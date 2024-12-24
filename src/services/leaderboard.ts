@@ -81,8 +81,8 @@ export function buildLeaderboardString(changes: Change[]) {
 
 export async function diffLeaderboard(
   db: Database,
-  members: FlatMember[],
-  year: number
+  year: number,
+  members: FlatMember[]
 ): Promise<Change[]> {
   const withPlaces = (members: FlatMember[]) =>
     members.map(member => ({

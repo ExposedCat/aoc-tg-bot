@@ -4,8 +4,8 @@ import { getLeaderborad } from '../services/aoc-api.js'
 import { getGroups } from '../services/group.js'
 import {
   buildLeaderboardString,
-  diffLeaderboard,
-  getChangesInfo
+  changesToString,
+  diffLeaderboard
 } from '../services/leaderboard.js'
 import { saveMembers } from '../services/member.js'
 import type { Bot } from '../types/telegram.js'
@@ -24,12 +24,13 @@ export async function startFetchingLeaderboard(
         process.env.LEADERBOARD_ID,
         2024
       )
-      const changes = await diffLeaderboard(database, currentMembers)
-      await saveMembers(database, currentMembers)
+      // TODO: all years
+      const changes = await diffLeaderboard(database, 2024, currentMembers)
+      await saveMembers(database, 2024, currentMembers)
       if (changes.length) {
         const groups = await getGroups(database)
         const stringLeaderboard = buildLeaderboardString(changes)
-        const changeLines = getChangesInfo(changes)
+        const changeLines = changesToString(changes)
         const text = i18n.t('en', 'leaderboard', {
           leaderboard: `${changeLines}\n${stringLeaderboard}`
         })
