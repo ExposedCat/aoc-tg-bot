@@ -20,11 +20,11 @@ export async function startFetchingLeaderboard(
 ): Promise<void> {
   const job = async () => {
     try {
+      // TODO: all years
       const currentMembers = await getLeaderborad(
         process.env.LEADERBOARD_ID,
         2024
       )
-      // TODO: all years
       const changes = await diffLeaderboard(database, 2024, currentMembers)
       await saveMembers(database, 2024, currentMembers)
       if (changes.length) {

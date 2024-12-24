@@ -109,24 +109,17 @@ export async function diffLeaderboard(
     }))
   for (const member of oldMembers) {
     const updated = currentMembers.find(current => current.id === member.id)
-    if (
-      !updated ||
-      updated.flakes !== member.flakes ||
-      updated.stars !== member.stars ||
-      updated.place !== member.place
-    ) {
-      changes.push({
-        new: false,
-        quit: !updated,
-        name: member.name ?? member.id.toString(),
-        place: updated?.place ?? 0,
-        flakes: updated?.flakes ?? 0,
-        timings: updated?.timings ?? [],
-        placeChange: updated ? member.place - updated.place : 0,
-        flakeChange: updated ? updated.flakes - member.flakes : 0,
-        starChange: updated ? updated.stars - member.stars : 0
-      })
-    }
+    changes.push({
+      new: false,
+      quit: !updated,
+      name: member.name ?? member.id.toString(),
+      place: updated?.place ?? 0,
+      flakes: updated?.flakes ?? 0,
+      timings: updated?.timings ?? [],
+      placeChange: updated ? member.place - updated.place : 0,
+      flakeChange: updated ? updated.flakes - member.flakes : 0,
+      starChange: updated ? updated.stars - member.stars : 0
+    })
   }
   return changes.sort((a, b) => a.place - b.place)
 }
