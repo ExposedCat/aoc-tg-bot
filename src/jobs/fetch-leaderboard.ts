@@ -27,7 +27,12 @@ export async function startFetchingLeaderboard(
       )
       const changes = await diffLeaderboard(database, 2024, currentMembers)
       await saveMembers(database, 2024, currentMembers)
-      if (changes.length) {
+      if (
+        changes.some(
+          change =>
+            change.flakeChange || change.starChange || change.placeChange
+        )
+      ) {
         const groups = await getGroups(database)
         const stringLeaderboard = buildLeaderboardString(changes)
         const changeLines = changesToString(changes)
