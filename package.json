@@ -10,15 +10,10 @@
     "bg:restart": "npm run compile && pm2 restart aoc",
     "bg:logs": "pm2 logs aoc --lines 1000 -f",
     "start": "npm run compile && node .",
-    "lint": "npx prettier --write src"
+    "lint": "npx biome lint --write src",
+    "format": "npx biome format --write src"
   },
-  "keywords": [
-    "telegram",
-    "bot",
-    "grammy",
-    "mongodb",
-    "typescript"
-  ],
+  "keywords": ["telegram", "bot", "grammy", "mongodb", "typescript"],
   "author": "ExposedCat",
   "license": "GPL-3.0-or-later",
   "dependencies": {
@@ -28,18 +23,8 @@
     "mongodb": "^4.9.1"
   },
   "devDependencies": {
+    "@biomejs/biome": "^1.9.4",
     "@types/node": "^18.7.4",
-    "@types/pg": "^8.6.5",
-    "@typescript-eslint/parser": "^6.7.3",
-    "eslint": "^8.50.0",
-    "eslint-config-prettier": "^9.0.0",
-    "eslint-plugin-functional": "^6.0.0",
-    "eslint-plugin-github": "^4.10.1",
-    "eslint-plugin-import": "^2.28.1",
-    "eslint-plugin-prettier": "^5.0.0",
-    "eslint-plugin-react": "^7.33.2",
-    "eslint-plugin-sonarjs": "^0.21.0",
-    "prettier": "^3.0.3",
     "typescript": "^4.7.4"
   },
   "type": "module",

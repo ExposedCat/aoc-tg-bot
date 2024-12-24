@@ -1,8 +1,6 @@
 import type { Member } from './member.js'
 
-const ENDPOINT = 'https://adventofcode.com/2024/leaderboard/private/view'
-
-type APIResponse = {
+type ApiResponse = {
   event: string
   owner_id: number
   members: Record<
@@ -28,12 +26,13 @@ type APIResponse = {
   >
 }
 
-export async function getLeaderborad(id: string): Promise<Member[] | []> {
+export async function getLeaderborad(id: string, year: number) {
   try {
-    const response = await fetch(`${ENDPOINT}/${id}.json`, {
-      headers: { Cookie: `session=${process.env.SESSION}` }
-    })
-    const data: APIResponse = await response.json()
+    const response = await fetch(
+      `https://adventofcode.com/${year}/leaderboard/private/view/${id}.json`,
+      { headers: { Cookie: `session=${process.env.SESSION}` } }
+    )
+    const data: ApiResponse = await response.json()
 
     return Object.values(data.members)
       .map(member => ({
@@ -48,9 +47,9 @@ export async function getLeaderborad(id: string): Promise<Member[] | []> {
             }))
         ),
         stars: member.stars,
-        localScore: member.local_score
+        flakes: member.local_score
       }))
-      .sort((a, b) => b.localScore - a.localScore)
+      .sort((a, b) => b.flakes - a.flakes)
   } catch (error) {
     console.error('Failed to fetch leaderboard!', error)
     return []

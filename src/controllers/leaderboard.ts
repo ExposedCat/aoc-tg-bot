@@ -12,7 +12,7 @@ leaderboardController.command('leaderboard', async ctx => {
       name: member.name ?? `Anon ${member.id}`,
       timings: member.timings,
       new: false,
-      score: member.localScore,
+      score: member.flakes,
       scoreChange: 0,
       place: member.place,
       placeChange: 0

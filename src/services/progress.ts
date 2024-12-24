@@ -1,9 +1,9 @@
 import { formatItem } from './ascii.js'
-import type { Member } from './member.js'
+import type { FlatMember } from './member.js'
 
 const DAY = 24 * 60 * 60 * 1_000
 
-export function getCompletionStars(timings: Member['timings']) {
+export function getCompletionStars(timings: FlatMember['timings']) {
   const lastDay = Math.min(
     31,
     Math.ceil((Number(new Date()) - Number(new Date(2024, 11, 1))) / DAY)
@@ -14,15 +14,15 @@ export function getCompletionStars(timings: Member['timings']) {
   let stars = ''
   for (let day = 1; day <= lastDay; ++day) {
     stars += completed.includes(`${day}.2`)
-      ? '*'
+      ? '★'
       : completed.includes(`${day}.1`)
-        ? '.'
+        ? '☆'
         : ' '
   }
   return stars
 }
 
-export function buildProgressString(members: Member[]) {
+export function buildProgressString(members: FlatMember[]) {
   let result = ''
   for (const member of members) {
     const progress = getCompletionStars(member.timings)

@@ -3,8 +3,8 @@ import type { Database } from '../config/database.js'
 import { getLeaderborad } from '../services/aoc-api.js'
 import { getGroups } from '../services/group.js'
 import {
-  diffLeaderboard,
   buildLeaderboardString,
+  diffLeaderboard,
   getChangesInfo
 } from '../services/leaderboard.js'
 import { saveMembers } from '../services/member.js'
@@ -20,7 +20,10 @@ export async function startFetchingLeaderboard(
 ): Promise<void> {
   const job = async () => {
     try {
-      const currentMembers = await getLeaderborad(process.env.LEADERBOARD_ID)
+      const currentMembers = await getLeaderborad(
+        process.env.LEADERBOARD_ID,
+        2024
+      )
       const changes = await diffLeaderboard(database, currentMembers)
       await saveMembers(database, currentMembers)
       if (changes.length) {
@@ -33,7 +36,7 @@ export async function startFetchingLeaderboard(
         for (const group of groups) {
           try {
             await bot.api.sendMessage(group.id, text, { parse_mode: 'HTML' })
-          } catch (error) {
+          } catch {
             console.error(`Failed to notify chat ${group.id}!`)
           }
         }
