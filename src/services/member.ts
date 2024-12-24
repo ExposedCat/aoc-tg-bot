@@ -1,4 +1,4 @@
-import type { AnyBulkWriteOperation } from 'mongodb'
+import type { AnyBulkWriteOperation, UnorderedBulkOperation } from 'mongodb'
 import type { Database } from '../config/database.js'
 
 export type Member = {
@@ -43,25 +43,58 @@ export async function saveMembers(
   year: number,
   members: FlatMember[]
 ): Promise<void> {
-  await db.member.updateMany(
-    { id: { $in: members.map(member => member.id) } },
-    { $pull: { years: { year } } }
-  )
+  const ids = members.map(member => member.id)
 
-  const updates = members.flatMap<AnyBulkWriteOperation<Member>>(
-    ({ id, name, ...member }) => [
-      {
-        updateOne: {
-          filter: { id, 'years.year': year },
-          update: {
-            $set: { name },
-            $push: { years: { year, ...member } }
-          },
-          upsert: true
-        }
+  const creators = members.flatMap(member => [
+    {
+      updateOne: {
+        filter: { id: member.id },
+        update: {
+          $set: {
+            id: member.id,
+            name: member.name,
+            years: []
+          }
+        },
+        upsert: true
       }
-    ]
-  )
+    }
+  ])
 
-  await db.member.bulkWrite(updates)
+  const setters = members.flatMap(member => [
+    {
+      updateOne: {
+        filter: { id: member.id },
+        update: {
+          $set: {
+            name: member.name,
+            'years.$[elem].timings': member.timings,
+            'years.$[elem].stars': member.stars,
+            'years.$[elem].flakes': member.flakes
+          }
+        },
+        arrayFilters: [{ 'elem.year': year }]
+      }
+    }
+  ])
+
+  const operations: AnyBulkWriteOperation<Member>[] = [
+    ...creators,
+    {
+      updateMany: {
+        filter: { 'years.year': year },
+        update: { $pull: { years: { year } } }
+      }
+    },
+    {
+      updateMany: {
+        filter: { id: { $in: ids } },
+        // biome-ignore lint/suspicious/noExplicitAny: <explanation>
+        update: { $push: { years: { year } as any } }
+      }
+    },
+    ...setters
+  ]
+
+  await db.member.bulkWrite(operations, { ordered: true })
 }

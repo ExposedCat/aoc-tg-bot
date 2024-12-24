@@ -43,7 +43,7 @@ export async function startFetchingLeaderboard(
         }
       }
     } catch (error) {
-      console.error('Failed to save members!', error)
+      console.error('Failed to save members:', error)
     }
   }
   await job()
