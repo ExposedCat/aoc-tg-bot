@@ -17,6 +17,15 @@ export type Change = Pick<FlatMember, 'flakes' | 'timings'> & {
 export function changesToString(changes: Change[]) {
   let lines = ''
   for (const change of changes) {
+    if (
+      !change.flakeChange &&
+      !change.starChange &&
+      !change.placeChange &&
+      !change.quit &&
+      !change.new
+    ) {
+      continue
+    }
     lines += `${change.name} `
     if (change.new) {
       lines += `joined AoC`
